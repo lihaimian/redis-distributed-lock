@@ -1,7 +1,6 @@
 package com.distributedlock.lock;
 
 
-import com.sun.tools.javac.util.Assert;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +9,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -25,10 +25,10 @@ public class LuaDistributedLock implements ILock,InitializingBean{
     private static final int LOCK_MAX_EXIST_TIME = 5;  // 单位s，加锁操作持有锁的最大时间
     private static final String LOCK_PREX = "lock_"; // 锁的key的前缀
 
-    @Value("${redis.distributed.lock.key-prex}")
+//    @Value("${redis.distributed.lock.key-prex}")
     private String lockPrex; // 锁key的前缀
 
-    @Value("${redis.distributed.lock.key-max-exist-time}")
+//    @Value("${redis.distributed.lock.key-max-exist-time}")
     private int lockMaxExistTime = 0;  // 单位s，加锁操作持有锁的最大时间
     @Autowired
     private StringRedisTemplate redisTemplate;
@@ -60,7 +60,7 @@ public class LuaDistributedLock implements ILock,InitializingBean{
     }
 
     public void lock(String lock) {
-        Assert.checkNull(lock,"lock can't be null");
+        Assert.notNull(lock,"lock can't be null");
         String key = getLockKey(lock);
         List<String> keyList = new ArrayList<String>();
         keyList.add(key);
