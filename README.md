@@ -1,7 +1,7 @@
 # redis-distributed-lock
 
 #### 介绍
-redis原子性操作分布式锁，使用redis作为锁的资源存储，使用lua脚本加锁保证锁的原子性操作
+集成spring boot框架的redis分布式锁，使用redis作为锁的资源存储，使用lua脚本加锁保证锁的原子性操作
 
 #### 软件架构
 软件架构说明
