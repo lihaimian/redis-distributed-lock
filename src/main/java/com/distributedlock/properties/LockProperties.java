@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 public class LockProperties {
 
     private String lockPrex;//锁key的前缀
-    private int lockMaxExistTime;// 单位s，加锁操作持有锁的最大时间
+    private int lockMaxExistTime = 0;// 单位s，加锁操作持有锁的最大时间
+    private int retryCount = 0;//重试次数
 
     public int getLockMaxExistTime() {
         return lockMaxExistTime;
@@ -26,5 +27,13 @@ public class LockProperties {
 
     public void setLockPrex(String lockPrex) {
         this.lockPrex = lockPrex;
+    }
+
+    public int getRetryCount() {
+        return retryCount;
+    }
+
+    public void setRetryCount(int retryCount) {
+        this.retryCount = retryCount;
     }
 }
