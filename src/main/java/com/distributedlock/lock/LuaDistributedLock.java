@@ -1,9 +1,10 @@
 package com.distributedlock.lock;
 
 
+import com.distributedlock.properties.LockProperties;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
@@ -20,16 +21,14 @@ import java.util.UUID;
  * Created by alex on 18/12/18.
  */
 @Component
+//@EnableConfigurationProperties(LockProperties.class)
 public class LuaDistributedLock implements ILock,InitializingBean{
 
     private static final int LOCK_MAX_EXIST_TIME = 5;  // 单位s，加锁操作持有锁的最大时间
     private static final String LOCK_PREX = "lock_"; // 锁的key的前缀
 
-//    @Value("${redis.distributed.lock.key-prex}")
-    private String lockPrex; // 锁key的前缀
-
-//    @Value("${redis.distributed.lock.key-max-exist-time}")
-    private int lockMaxExistTime = 0;  // 单位s，加锁操作持有锁的最大时间
+    @Autowired
+    private LockProperties lockProperties;
     @Autowired
     private StringRedisTemplate redisTemplate;
 
@@ -66,7 +65,7 @@ public class LuaDistributedLock implements ILock,InitializingBean{
         keyList.add(key);
         keyList.add(threadKeyId.get());
         while(true){
-            if(redisTemplate.execute(lockScript,keyList,String.valueOf(lockMaxExistTime * 1000))>0){
+            if(redisTemplate.execute(lockScript,keyList,String.valueOf(lockProperties.getLockMaxExistTime() * 1000))>0){
                 //返回结果大于0，表示加锁成功
                 break;
             }else{
@@ -95,16 +94,16 @@ public class LuaDistributedLock implements ILock,InitializingBean{
      */
     private String getLockKey(String lock){
         StringBuilder sb = new StringBuilder();
-        sb.append(lockPrex).append(lock);
+        sb.append(lockProperties.getLockPrex()).append(lock);
         return sb.toString();
     }
 
     public void afterPropertiesSet() throws Exception {
-        if(StringUtils.isEmpty(lockPrex)){
-            this.lockPrex = LOCK_PREX;
+        if(StringUtils.isEmpty(lockProperties.getLockPrex())){
+            lockProperties.setLockPrex(LOCK_PREX);
         }
-        if(this.lockMaxExistTime<=0){
-            lockMaxExistTime = LOCK_MAX_EXIST_TIME;
+        if(lockProperties.getLockMaxExistTime()<=0){
+            lockProperties.setLockMaxExistTime(LOCK_MAX_EXIST_TIME);
         }
         initialize();
     }
