@@ -15,8 +15,8 @@
 
 #### 使用说明
 
-1. 将该工具打成jar包，集成到你的工程里面，在spring boot的启动类中加入对该工具的注解扫描,否则spring无法扫描到
-2. xxxx
+1. 将该工具打成jar包，集成到你的工程里面
+2. 使用时声明ILockManager对象，使用@Autowired自动注入实例，使用ILockManager的实例对象进行操作即可
 3. xxxx
 
 #### 参与贡献
