@@ -107,10 +107,10 @@ public class LuaDistributedLock implements ILock, InitializingBean {
     }
 
     public void afterPropertiesSet() throws Exception {
-        if (StringUtils.isEmpty(lockProperties.getLockPrex())) {
+        if (!StringUtils.isEmpty(lockProperties.getLockPrex())) {
             lockProperties.setLockPrex(LOCK_PREX);
         }
-        if (lockProperties.getLockMaxExistTime() <= 0) {
+        if (lockProperties.getLockMaxExistTime() > 0) {
             lockProperties.setLockMaxExistTime(LOCK_MAX_EXIST_TIME);
         }
         initialize();
