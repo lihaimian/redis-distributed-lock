@@ -17,7 +17,11 @@
 
 1. 将该工具打成jar包，集成到你的工程里面
 2. 使用时声明ILockManager对象，使用@Autowired自动注入实例，使用ILockManager的实例对象进行操作即可
-3. xxxx
+3. 可配置参数：
+       redis.distributed.lock.lock-max-exist-time：锁的最长保持时间
+       redis.distributed.lock.lock-prex：锁key存储到redis的key前缀
+       redis.distributed.lock.retry-count：获取锁失败时的重试次数
+        
 
 #### 参与贡献
 
