@@ -26,11 +26,8 @@ import java.util.UUID;
 //@EnableConfigurationProperties(LockProperties.class)
 public class LuaDistributedLock implements ILock, InitializingBean {
 
-    private static final int LOCK_MAX_EXIST_TIME = 5;  // 单位s，加锁操作持有锁的最大时间
-    private static final String LOCK_PREX = "lock_"; // 锁的key的前缀
 
-    @Autowired
-    private LockProperties lockProperties;
+
     @Autowired
     private StringRedisTemplate redisTemplate;
 
@@ -60,9 +57,9 @@ public class LuaDistributedLock implements ILock, InitializingBean {
 
     }
 
-    public void lock(String lock) {
+    public void lock(String lock,LockProperties lockProperties) {
         Assert.notNull(lock, "lock can't be null");
-        String key = getLockKey(lock);
+        String key = getLockKey(lock,lockProperties);
         List<String> keyList = new ArrayList<String>();
         keyList.add(key);
         keyList.add(threadKeyId.get());
@@ -86,8 +83,8 @@ public class LuaDistributedLock implements ILock, InitializingBean {
 
     }
 
-    public void unlock(String lock) {
-        final String lockKey = getLockKey(lock);
+    public void unlock(String lock,LockProperties lockProperties) {
+        final String lockKey = getLockKey(lock,lockProperties);
         List<String> keyList = new ArrayList<String>();
         keyList.add(lockKey);
         keyList.add(threadKeyId.get());
@@ -100,19 +97,14 @@ public class LuaDistributedLock implements ILock, InitializingBean {
      * @param lock
      * @return
      */
-    private String getLockKey(String lock) {
+    private String getLockKey(String lock,LockProperties lockProperties) {
         StringBuilder sb = new StringBuilder();
         sb.append(lockProperties.getLockPrex()).append(lock);
         return sb.toString();
     }
 
     public void afterPropertiesSet() throws Exception {
-        if (!StringUtils.isEmpty(lockProperties.getLockPrex())) {
-            lockProperties.setLockPrex(LOCK_PREX);
-        }
-        if (lockProperties.getLockMaxExistTime() > 0) {
-            lockProperties.setLockMaxExistTime(LOCK_MAX_EXIST_TIME);
-        }
+
         initialize();
     }
 }
