@@ -13,9 +13,9 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan
 public class AutoConfiguration {
 
-    @Bean
-    @ConfigurationProperties(prefix = "redis.distributed.lock")
-    public LockProperties lockProperties(){
-        return new LockProperties();
-    }
+//    @Bean
+//    @ConfigurationProperties(prefix = "redis.distributed.lock")
+//    public LockProperties lockProperties(){
+//        return new LockProperties();
+//    }
 }

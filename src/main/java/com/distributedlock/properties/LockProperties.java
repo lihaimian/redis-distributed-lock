@@ -2,11 +2,14 @@ package com.distributedlock.properties;
 
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 /**
  * Created by alex on 18/12/19.
  */
+@Configuration
+@ConfigurationProperties(prefix = "redis.distributed.lock")
 public class LockProperties {
 
     private String lockPrex;//锁key的前缀
