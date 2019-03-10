@@ -3,32 +3,30 @@ package com.distributedlock.aspect;
 import com.distributedlock.annotation.Lock;
 import com.distributedlock.annotation.LockKey;
 import com.distributedlock.lock.ILock;
-import com.distributedlock.manager.ILockManager;
-import com.distributedlock.manager.LockCallBack;
 import com.distributedlock.properties.LockProperties;
+import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 
-/**
+/** 针对加了@Lock的函数进行分布式锁的增强处理
  * Created by alex on 18/12/24.
  */
 @Component
 @Aspect
 public class DistributedLockAspect {
+
+    private Logger logger = LoggerFactory.getLogger(DistributedLockAspect.class);
 
     @Autowired
     private ILock distributeLock;
@@ -39,25 +37,31 @@ public class DistributedLockAspect {
     public void advice(){
     }
 
+    /**
+     * 对使用了Lock的注解进行解析加入分布式锁
+     * @param pjp
+     * @return
+     * @throws Throwable
+     */
     @Around("advice()")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         LockProperties lockProp = new LockProperties();
         BeanUtils.copyProperties(lockProperties,lockProp);
         Method method = ((MethodSignature) pjp.getSignature()).getMethod();
         Lock lock = method.getAnnotation(Lock.class);
-        if(StringUtils.isEmpty(lock.lockPrex())){
-            lockProp.setLockPrex(lock.lockPrex());
+        if(StringUtils.isNotBlank(lock.lockPre())){
+            lockProp.setLockPre(lock.lockPre());
         }
         if(lock.retryCount()>0){
             lockProp.setRetryCount(lock.retryCount());
         }
-        if(lock.maxExistsTime()>0){
-            lockProp.setLockMaxExistTime(lock.maxExistsTime());
+        if(lock.expiredTime()>0){
+            lockProp.setExpiredTime(lock.expiredTime());
         }
         String key = lock.key();
-        //若存在参数作为key，则设置参数作为key
+        //若存在@LockKey的入参，则将其设置为分布式锁的KEY
         String paramKey = paramToKey(method,pjp.getArgs());
-        if(!StringUtils.isEmpty(paramKey)){
+        if(StringUtils.isNotBlank(paramKey)){
             key = key + paramKey;
         }
         //分布式锁没有key，则取其类名+方法名
@@ -67,28 +71,38 @@ public class DistributedLockAspect {
             key = className + ":" + methodName;
         }
         try{
-            distributeLock.lock(key,lockProp);
-            return pjp.proceed();
+            String lockKey = distributeLock.lock(key,lockProp);
+            Object object =  pjp.proceed();
+            logger.debug("加锁业务执行成功，lockKey:{}，准备释放锁",lockKey);
+            return object;
         }finally {
             distributeLock.unlock(key,lockProp);
         }
     }
 
+    /**
+     * 根据函数的入参及参数注解，将存在注解的参数拼接成字符串作为KEY
+     * @param method
+     * @param args
+     * @return
+     */
     private String paramToKey(Method method,Object[] args){
-//        List<Object> objs = new ArrayList<Object>();
-//        Annotation[][] paramAnnotations = method.getParameterAnnotations();
-//        for(int i=0;i<paramAnnotations.length;i++){
-//            Annotation[] annotations = paramAnnotations[i];
-//            if (annotations.length > 0) {
-//                Optional<Annotation> optional = Arrays.stream(annotations).filter(p -> p instanceof LockKey).findFirst();
-//                if (optional != null) {
-//                    LockKey lockKey = LockKey.class.cast(optional.get());
-//                    objs.addAll(parseAnnotation(lockKey, args[i]));
-//                }
-//            }
-//        }
-        return null;
-
+        StringBuilder sb = new StringBuilder();
+        Annotation[][] paramAnnotations = method.getParameterAnnotations();
+        for(int i=0;i<paramAnnotations.length;i++){
+            Annotation[] annotation = paramAnnotations[i];
+            if(annotation.length>0){
+                for(int j=0;j<annotation.length;j++){
+                    if(annotation[j] instanceof LockKey){
+                        if(sb.length()>0){
+                            sb.append(":");
+                        }
+                        sb.append(args[i]);
+                    }
+                }
+            }
+        }
+        return sb.toString();
     }
 
 }

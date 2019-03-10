@@ -1,35 +1,33 @@
 package com.distributedlock.properties;
 
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
-/**
+/** 分布式锁全局配置信息
  * Created by alex on 18/12/19.
  */
 @Configuration
 @ConfigurationProperties(prefix = "redis.distributed.lock")
 public class LockProperties {
 
-    private String lockPrex;//锁key的前缀
-    private int lockMaxExistTime = 0;// 单位s，加锁操作持有锁的最大时间
-    private int retryCount = 0;//重试次数
+    private String lockPre = "";//锁key的前缀
+    private int expiredTime = 30;// 单位s，加锁操作持有锁的最大时间
+    private int retryCount = 2;//获取锁的重试次数
 
-    public int getLockMaxExistTime() {
-        return lockMaxExistTime;
+    public int getExpiredTime() {
+        return expiredTime;
     }
 
-    public void setLockMaxExistTime(int lockMaxExistTime) {
-        this.lockMaxExistTime = lockMaxExistTime;
+    public void setExpiredTime(int expiredTime) {
+        this.expiredTime = expiredTime;
     }
 
-    public String getLockPrex() {
-        return lockPrex;
+    public String getLockPre() {
+        return lockPre;
     }
 
-    public void setLockPrex(String lockPrex) {
-        this.lockPrex = lockPrex;
+    public void setLockPre(String lockPre) {
+        this.lockPre = lockPre;
     }
 
     public int getRetryCount() {

@@ -8,17 +8,25 @@ import com.distributedlock.properties.LockProperties;
 public interface ILock {
 
     /**
+     *
+     * @param lock
+     * @param lockProperties
+     */
+    /**
      * 获取锁
      * @param lock
      * @param lockProperties
+     * @return redisLockKey
      */
-    void lock(String lock, LockProperties lockProperties);
+    String lock(String lock, LockProperties lockProperties);
+
 
 
     /**
-     * 释放锁
+     * 获取锁
      * @param lock
      * @param lockProperties
+     * @return redisLockKey
      */
-    void unlock(String lock,LockProperties lockProperties);
+    String unlock(String lock,LockProperties lockProperties);
 }

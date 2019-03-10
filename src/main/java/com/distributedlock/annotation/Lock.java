@@ -12,11 +12,11 @@ public @interface Lock {
 
     String key() default "";//锁的KEY
 
-    String lockPrex() default "LOCK_";//锁的前缀
+    String lockPre() default "";//锁的前缀
 
-    int retryCount() default 2;//重试次数
+    int retryCount() default 0;//重试次数
 
-    int maxExistsTime() default 5;//持锁时间 单位：s
+    int expiredTime() default 0;//持锁时间 单位：s
 
 
 }
