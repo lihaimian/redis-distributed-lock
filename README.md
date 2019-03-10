@@ -81,6 +81,7 @@
         });
     }
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0310/221503_6e9ff162_1993405.png "锁方式一.png")
+
     
 ```
 
@@ -116,6 +117,7 @@
     1.默认情况下，会使用类名+函数名作为分布式锁的KEY。
     2.函数的入参可以添加@LockKey注解，分布式锁将使用函数中所有添加了@LockKey的参数值拼接作为分布式锁的KEY
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0310/221531_e6c2cbf0_1993405.png "锁方式二.png")
+
 
 ```
 
