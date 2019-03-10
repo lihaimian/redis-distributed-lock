@@ -39,7 +39,7 @@
     #分布式锁的获取锁失败重试次数
     redis.distributed.lock.retry-count=2
 
-    ![输入图片说明](https://images.gitee.com/uploads/images/2019/0310/221937_2798ace7_1993405.png "lock_properties.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2019/0310/221937_2798ace7_1993405.png "全局配置信息")
 
 ```
 
@@ -85,7 +85,7 @@
         });
     }
 
-![输入图片说明](https://images.gitee.com/uploads/images/2019/0310/222015_e14b4b80_1993405.png "mode1.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0310/222015_e14b4b80_1993405.png "使用方式一")
     
 ```
 
@@ -121,7 +121,7 @@
     1.默认情况下，会使用类名+函数名作为分布式锁的KEY。
     2.函数的入参可以添加@LockKey注解，分布式锁将使用函数中所有添加了@LockKey的参数值拼接作为分布式锁的KEY
 
-    ![输入图片说明](https://images.gitee.com/uploads/images/2019/0310/222053_513b720b_1993405.png "mode2.png")
+    ![输入图片说明](https://images.gitee.com/uploads/images/2019/0310/222053_513b720b_1993405.png "使用方式二")
 
 ```
 
