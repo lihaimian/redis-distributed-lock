@@ -21,6 +21,7 @@
 
 #### 使用说明
 
+```
 全局统一配置：
 1.redis配置
      在Spring的配置文件bootstrap.properties或application.properties中添加redis配置信息
@@ -39,6 +40,8 @@
     redis.distributed.lock.retry-count=2
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0310/220953_55e24352_1993405.png "锁配置.png")
+```
+
 方式一：注入方式
 
 ```
