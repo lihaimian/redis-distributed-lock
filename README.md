@@ -8,16 +8,19 @@
 
 
 #### 安装教程
-
+```
 1. 安装
-    将工程下载到本地，导入IDE，进行install
+    将工程下载到本地，导入IDE开发工具，进行install。
 2. 添加依赖
-    在需要使用该分布式锁的工程的pom.xml文件中加入以下依赖
-        <dependency>
-			<groupId>com.common</groupId>
-			<artifactId>redis-distributed-lock</artifactId>
-			<version>1.0.0</version>
-	   </dependency>
+    在需要使用该分布式锁工程的pom.xml文件中加入以下依赖：
+    <dependency>
+        <groupId>com.common</groupId>
+        <artifactId>redis-distributed-lock</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+
+```
+
 
 #### 使用说明
 
@@ -47,7 +50,7 @@
 
 ```
 1.在需要使用锁的实例Bean中添加分布式锁的操作Bean和全局配置信息
-	@Autowired
+    @Autowired
     private ILockManager lockManager;
     @Autowired
     private LockProperties lockProperties;
