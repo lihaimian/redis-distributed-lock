@@ -42,6 +42,7 @@
     #分布式锁的获取锁失败重试次数
     redis.distributed.lock.retry-count=2
 
+    ![Image text](https://images.gitee.com/uploads/images/2019/0310/221937_2798ace7_1993405.png)
     ![输入图片说明](https://images.gitee.com/uploads/images/2019/0310/221937_2798ace7_1993405.png "全局配置信息")
 
 ```
