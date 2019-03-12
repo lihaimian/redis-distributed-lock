@@ -14,8 +14,8 @@
 2. 添加依赖
     在需要使用该分布式锁工程的pom.xml文件中加入以下依赖：
     <dependency>
-        <groupId>com.common</groupId>
-        <artifactId>redis-distributed-lock</artifactId>
+        <groupId>com.springboot.redis</groupId>
+    	<artifactId>redis-distributed-lock</artifactId>
         <version>1.0.0</version>
     </dependency>
 
