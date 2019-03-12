@@ -9,7 +9,7 @@
         <version>2.0.1.RELEASE</version>
         <relativePath/>
     </parent>
-    <groupId>com.common</groupId>
+    <groupId>com.springboot.redis</groupId>
     <artifactId>redis-distributed-lock</artifactId>
     <version>1.0.0</version>
 
