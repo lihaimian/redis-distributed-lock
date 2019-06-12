@@ -110,7 +110,7 @@ public class LuaDistributedLock implements ILock, InitializingBean {
             return lock;
         }
         StringBuilder sb = new StringBuilder();
-        sb.append(lockProperties.getLockPre()).append(lock);
+        sb.append(lockProperties.getLockPre()).append(":").append(lock);
         return sb.toString();
     }
 
